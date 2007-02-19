@@ -1,0 +1,71 @@
+
+KLD-SAMPLING: Adequately Sampling from an Unknown Distribution.
+
+Copyright (C) 2006 - Patrick Beeson  (pbeeson@cs.utexas.edu)
+This program is released under the GNU General Public License (GPL).
+See COPYING for details.
+
+----------------------------------
+
+This program implements Dieter Fox's KLD-sampling algorithm (KLD
+stands for Kullback-Leibler distance).  When using particle filters to
+approximate an unknown distribution, too few particles may not
+adequately sample the underlying distribution, while too many samples
+can increase the run time of time sensitive programs (e.g. particle
+filter localization for a mobile robot).  Running this program
+demonstrates how different KLD-sampling parameters affect both the
+number of samples and the estimated mean and variance of the
+underlying distribution.  This sample program assumes a 1D underlying
+distribution, but the provided KLD-sampling module works on
+multivariate distributions.
+
+
+Relevant Citations:
+
+Fox, 2003, "Adapting the sample size in particle filters through
+KLD-sampling." International Journal of Robotics Research (IJRR).
+
+----------------------------------
+
+
+Installation
+------------
+  $ make
+
+
+Running
+-------
+  $ ./test <options>
+
+options: 
+
+-? : Prints options
+
+bin-size, quantile, and error are best determined experimentally.  See
+Dieter Fox's text for experiments on mobile robot localization.
+
+-bin-size B : KLD-sampling uses discrete bins to detect how well the
+	  underlying distribution is being sampled.  The larger the
+	  bins, the fewer particles needed, but the less accurate the
+	  discrete, sampled distribution will be.  Value must be
+	  greater than 0.
+
+-quantile Q : Probability that the KL-distance between the discrete,
+	  sampled distribution (set by bin-size) is less than ERROR
+	  (see below) from the true distribution.  Must be between 0.5
+	  and 1.0 (max thresholded at 0.99998).
+
+-error E : Target KL-distance between discrete, sampled distribution
+        and true underlying distribution.  Must be greater than 0.
+
+-min-samples M : Minimum number of samples.  KLD-sampling always
+	     samples AT LEAST 10 samples.
+
+-underlying-mean U : The mean of the underlying Gaussian being sampled
+		 from.  By default this is 0.
+
+-underlying-variance V : The variance of the underlying Gaussian being
+		     sampled from.  By default this is 1.
+
+-seed S : Sets the random number generator seed.  By default,
+      the system clock is used to create a seed at run time.
